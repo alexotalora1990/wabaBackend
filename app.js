@@ -8,6 +8,7 @@ import express from "express"
                                   import campaniasSistemaRoutes from "./routes/campaniasSistema.js";
                                   import campaniasClienteRoutes from "./routes/campaniasCliente.js";
                                   import pagosRouter from "./routes/pagos.js";
+                                  import loginRoutes from "./routes/login.js";
 
 
 
@@ -22,6 +23,7 @@ import express from "express"
                                   app.use("/api/campaniasSistema", campaniasSistemaRoutes);
                                   app.use("/api/campaniasCliente", campaniasClienteRoutes);
                                   app.use("/api/pagos", pagosRouter);
+                                  app.use("/api/login", loginRoutes);
 
 
  

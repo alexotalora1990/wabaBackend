@@ -3,14 +3,14 @@ import { check } from "express-validator";
 import httpCliente from "../controllers/clientes.js";
 import helpersCliente from "../helpers/clientes.js";
 import { validarCampos } from "../middleware/validar-campos.js";
-// import { validarJWT } from "../middleware/validar-jwts.js";
+import { validarJWT } from "../middleware/validar-jwt.js";
 // import { validarRol } from "../middleware/rolesPermisos.js";
 
 const router = Router();
 
 // Obtener todos los clientes
 router.get("/", [
-    // validarJWT,
+    validarJWT,
     
 ], httpCliente.getClientes);
 

@@ -1,4 +1,5 @@
 import Usuario from "../models/usuarios.js";
+import bcrypt from "bcryptjs";
 
 // Obtener todos los usuarios
 const httpsUsuario = {
@@ -28,14 +29,27 @@ getUsuarioById: async (req, res) => {
 // Crear un usuario
 postUsuario: async (req, res) => {
     try {
-        const nuevoUsuario = new Usuario(req.body);
-        await nuevoUsuario.save();
+        const { contrasena, ...restoDatos } = req.body; // Extraer contraseña del cuerpo de la solicitud
+        const salt = await bcrypt.genSalt(10); // Generar un salt para la encriptación
+        const hashedPassword = await bcrypt.hash(contrasena, salt); // Encriptar la contraseña
+
+        const nuevoUsuario = new Usuario({
+            ...restoDatos,
+            contrasena: hashedPassword, // Guardar la contraseña encriptada
+        });
+
+        await nuevoUsuario.save(); // Guardar el usuario en la base de datos
         res.status(201).json({ mensaje: "Usuario creado", usuario: nuevoUsuario });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Error al crear usuario" });
     }
 },
+
+
+
+
+
 
 // Activar usuario
 activarUsuario: async (req, res) => {

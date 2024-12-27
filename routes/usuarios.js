@@ -3,20 +3,21 @@ import { check } from "express-validator";
 import httpUsuario from "../controllers/usuarios.js";
 import helpersUsuario from "../helpers/usuarios.js";
 import { validarCampos } from "../middleware/validar-campos.js";
-// import { validarJWT } from "../middleware/validar-jwts.js";
-// import { validarRol } from "../middleware/rolesPermisos.js";
+import { validarJWT } from "../middleware/validar-jwt.js";
+import { validarRol } from "../middleware/validar-rol.js";
 
 const router = Router();
 
 // Obtener todos los usuarios
 router.get("/", [
-    // validarJWT,
-    // validarRol(["Administrador"]),
+    validarJWT,
+    validarRol(["admin","ayudante"]),
 ], httpUsuario.getUsuarios);
 
 // Obtener un usuario por ID
 router.get("/:id", [
-    // validarJWT,
+    validarJWT,
+    validarRol(["admin","ayudante"]),
     check("id", "ID de usuario inválido").isMongoId(),
     check("id").custom(helpersUsuario.validarExistaIdUsuario),
     validarCampos,
@@ -24,6 +25,8 @@ router.get("/:id", [
 
 // Crear un usuario
 router.post("/agregar", [
+    validarJWT,
+    // validarRol(["admin","ayudante"]),
     check("nombre", "El nombre es requerido").notEmpty(),
     check("correo", "El correo es requerido").notEmpty(),
     check("correo", "Formato de correo inválido").isEmail(),
@@ -37,7 +40,8 @@ router.post("/agregar", [
 
 // Activar usuario
 router.put("/activar/:id", [
-    // validarJWT,
+    validarJWT,
+    validarRol(["admin","ayudante"]),
     check("id", "ID de usuario inválido").isMongoId(),
     check("id").custom(helpersUsuario.validarExistaIdUsuario),
     validarCampos,
@@ -45,7 +49,8 @@ router.put("/activar/:id", [
 
 // Desactivar usuario
 router.put("/desactivar/:id", [
-    // validarJWT,
+    validarJWT,
+    validarRol(["admin","ayudante"]),
     check("id", "ID de usuario inválido").isMongoId(),
     check("id").custom(helpersUsuario.validarExistaIdUsuario),
     validarCampos,
@@ -53,7 +58,8 @@ router.put("/desactivar/:id", [
 
 // Actualizar usuario
 router.put("/actualizar/:id", [
-    // validarJWT,
+    validarJWT,
+    validarRol(["admin","ayudante"]),
     check("id", "ID de usuario inválido").isMongoId(),
     check("id").custom(helpersUsuario.validarExistaIdUsuario),
     check("nombre", "El nombre debe tener al menos 3 caracteres").optional().isLength({ min: 3 }),
