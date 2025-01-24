@@ -10,7 +10,7 @@ const router = Router();
 
 // Obtener todos los clientes
 router.get("/", [
-    validarJWT,
+    // validarJWT
     
 ], httpCliente.getClientes);
 
@@ -21,9 +21,20 @@ router.get("/:id", [
     check("id").custom(helpersCliente.validarExistaIdCliente),
     validarCampos,
 ], httpCliente.getClienteById);
+//clientes activos
+router.get("/listar/activos",[
+    // validarJWT,
+],httpCliente.getClientesActivos);
+
+
+//clientes inactivos
+router.get("/listar/inactivos",[
+    // validarJWT,
+],httpCliente.getClientesInactivos);
 
 // Crear un cliente
 router.post("/agregar", [
+    // validarJWT,
     check("nombre", "El nombre es requerido").notEmpty(),
     check("correo", "El correo es requerido").notEmpty(),
     check("correo", "Formato de correo inválido").isEmail(),

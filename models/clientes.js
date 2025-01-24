@@ -13,7 +13,7 @@ const clienteSchema = new mongoose.Schema({
   campaña: [
     {
       idCampaña: { type: mongoose.Schema.Types.ObjectId, ref: "Campaña" },
-      paso: { type: String, required: true }, 
+      paso: { type: String}, 
       fecha: { type: Date, default: Date.now }, 
       estado: { type: String, default: "activo" }, 
     },
