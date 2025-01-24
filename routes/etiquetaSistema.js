@@ -16,6 +16,16 @@ router.get("/:id", [
   validarCampos,
 ], httpEtiquetaSistema.getEtiquetaById);
 
+//Etiquetas activos
+router.get("/listar/activos",[
+  // validarJWT,
+],httpEtiquetaSistema.getEtiquetasActivas);
+
+
+//Etiquetas inactivos
+router.get("/listar/inactivos",[
+  // validarJWT,
+],httpEtiquetaSistema.getEtiquetasInactivos);
 // Crear una nueva etiqueta
 router.post("/agregar", [
   check("nombre", "El nombre es requerido").notEmpty(),
@@ -42,7 +52,13 @@ router.put("/activar/:id", [
 router.put("/desactivar/:id", [
   check("id", "ID de etiqueta inválido").isMongoId(),
   check("id").custom(helpersEtiquetaSistema.validarExistaIdEtiqueta),
-  validarCampos,
+  validarCampos, 
 ], httpEtiquetaSistema.desactivarEtiqueta);
+
+
+router.delete("/eliminar/:id", [
+  check("id", "ID de Etiqueta inválido").isMongoId(),
+  validarCampos,
+], httpEtiquetaSistema.deleteEtiqueta);
 
 export default router;

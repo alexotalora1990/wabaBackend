@@ -24,7 +24,27 @@ const httpCliente = {
       res.status(500).json({ error: "Error al obtener el cliente" });
     }
   },
+  // Obtener clientes activos
+getClientesActivos: async (req, res) => {
+  try {
+    const clientes = await Cliente.find({ estado: 1 });
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener clientes activos" });
+  }
+},
 
+// Obtener clientes inactivos
+getClientesInactivos: async (req, res) => {
+  try {
+    const clientes = await Cliente.find({ estado: 0 });
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener clientes inactivos" });
+  }
+},
   // Crear un cliente
   postCliente: async (req, res) => {
     try {

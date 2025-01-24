@@ -1,10 +1,11 @@
-import EtiquetaSistema from "../models/etiquetaSistema.js";
+import etiquetaSistema from "../models/etiquetaSistema.js";
+
 
 const httpEtiquetaSistema = {
   // Obtener todas las etiquetas
   getEtiquetas: async (req, res) => {
     try {
-      const etiquetas = await EtiquetaSistema.find();
+      const etiquetas = await etiquetaSistema.find();
       res.json(etiquetas);
     } catch (error) {
       console.error(error);
@@ -16,7 +17,7 @@ const httpEtiquetaSistema = {
   getEtiquetaById: async (req, res) => {
     try {
       const { id } = req.params;
-      const etiqueta = await EtiquetaSistema.findById(id);
+      const etiqueta = await etiquetaSistema.findById(id);
       if (!etiqueta) return res.status(404).json({ error: "Etiqueta no encontrada" });
       res.json(etiqueta);
     } catch (error) {
@@ -24,11 +25,32 @@ const httpEtiquetaSistema = {
       res.status(500).json({ error: "Error al obtener la etiqueta" });
     }
   },
+  // Obtener etiquetas activos
+  getEtiquetasActivas: async (req, res) => {
+    try {
+      const etiquetas = await etiquetaSistema.find({ estado: 1 });
+      res.json(etiquetas);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener etiquetas del sistema activos" });
+    }
+  },
+  
+  // Obtener etiquetas inactivos
+  getEtiquetasInactivos: async (req, res) => {
+    try {
+      const etiquetas= await etiquetaSistema.find({ estado: 0 });
+      res.json(etiquetas);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener etiquetas del sistema inactivos" });
+    }
+  },
 
   // Crear una nueva etiqueta
   postEtiqueta: async (req, res) => {
     try {
-      const nuevaEtiqueta = new EtiquetaSistema(req.body);
+      const nuevaEtiqueta = new etiquetaSistema(req.body);
       await nuevaEtiqueta.save();
       res.status(201).json({ mensaje: "Etiqueta creada", etiqueta: nuevaEtiqueta });
     } catch (error) {
@@ -41,7 +63,7 @@ const httpEtiquetaSistema = {
   putEtiqueta: async (req, res) => {
     try {
       const { id } = req.params;
-      const etiquetaActualizada = await EtiquetaSistema.findByIdAndUpdate(id, req.body, {
+      const etiquetaActualizada = await etiquetaSistema.findByIdAndUpdate(id, req.body, {
         new: true,
       });
       if (!etiquetaActualizada) return res.status(404).json({ error: "Etiqueta no encontrada" });
@@ -56,7 +78,7 @@ const httpEtiquetaSistema = {
   activarEtiqueta: async (req, res) => {
     try {
       const { id } = req.params;
-      const etiquetaActivada = await EtiquetaSistema.findByIdAndUpdate(id, { estado: 1 }, { new: true });
+      const etiquetaActivada = await etiquetaSistema.findByIdAndUpdate(id, { estado: 1 }, { new: true });
       if (!etiquetaActivada) return res.status(404).json({ error: "Etiqueta no encontrada" });
       res.json({ mensaje: "Etiqueta activada", etiqueta: etiquetaActivada });
     } catch (error) {
@@ -65,11 +87,14 @@ const httpEtiquetaSistema = {
     }
   },
 
+  
+
+
   // Desactivar etiqueta
   desactivarEtiqueta: async (req, res) => {
     try {
       const { id } = req.params;
-      const etiquetaDesactivada = await EtiquetaSistema.findByIdAndUpdate(id, { estado: 0 }, { new: true });
+      const etiquetaDesactivada = await etiquetaSistema.findByIdAndUpdate(id, { estado: 0 }, { new: true });
       if (!etiquetaDesactivada) return res.status(404).json({ error: "Etiqueta no encontrada" });
       res.json({ mensaje: "Etiqueta desactivada", etiqueta: etiquetaDesactivada });
     } catch (error) {
@@ -77,6 +102,19 @@ const httpEtiquetaSistema = {
       res.status(500).json({ error: "Error al desactivar etiqueta" });
     }
   },
+  
+  deleteEtiqueta: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await etiquetaSistema.findByIdAndDelete(id);
+      res.json({ mensaje: "Etiqueta eliminada" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al eliminar la etiqueta" });
+    }
+  },
+
+  
 };
 
 export default httpEtiquetaSistema;

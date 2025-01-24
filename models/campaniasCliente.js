@@ -7,7 +7,7 @@ const campaniasClienteSchema = new mongoose.Schema({
     {
       paso: { type: String, required: true },
       link: { type: String, required: true },
-    },
+    }, 
   ],
   estado: { type: Number, default: 1 }, // 1: Activo, 0: Inactivo
 });
